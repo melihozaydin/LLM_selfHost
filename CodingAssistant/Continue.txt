@@ -1,0 +1,3 @@
+https://github.com/continuedev/deploy-os-code-llm
+
+https://github.com/continuedev/what-llm-to-use
