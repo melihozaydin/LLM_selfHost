@@ -43,7 +43,7 @@ podman run -d ^
   -v %OLLAMA_WEBUI_VOLUME%:/app/backend/data ^
   --network %NETWORK_NAME% ^
   --add-host host.docker.internal:host-gateway ^
-  -p 8080:8082 ^
+  -p 8080:8080 ^
   -e OLLAMA_BASE_URLS=http://host.docker.internal:7869 ^
   -e ENV=dev ^
   -e WEBUI_AUTH=False ^
