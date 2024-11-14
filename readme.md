@@ -126,10 +126,26 @@ So setting up the containers by script is needed if using podman instead of dock
 ---
 
 
+### NOTE: ACCESS from LAN devices
+	(https://github.com/containers/podman/issues/17030)
+	WSL traffic is isolated to a separate network interface from Windows applications (this is the vWSL interface).
+	- PORT FORWARDİNG ISSUE ON LAN : https://github.com/containers/podman/issues/17030
+	If you need the port to be remotely accessible to other systems on the lan you need to add an ip forward 
+	- see bottom section of https://learn.microsoft.com/en-us/windows/wsl/networking
+  	"""Bash
+	ip route show | grep -i default | awk '{ print $3}'
+	"""
+	or 
+	podman machine ssh "ip route show | grep -i default | awk '{ print $3}'"
 
-###
-Websearch
 
+
+	""" Powershell (HOST)
+	netsh interface portproxy add v4tov4 listenport=8087 listenaddress=0.0.0.0 connectport=8080 connectaddress=192.168.127.1
+	netsh interface portproxy show all
+	"""
+
+### Websearch
 use internal port for searxng port:
 http://searxng:8080/search?q=<query>
 
@@ -139,6 +155,7 @@ http://10.89.1.29:8080/search?q=<query>
 
 ** (ollama-webui) Something went wrong :/ [Errno -2] Name or service not known 
 - setting Search Result Count to 2 and  concurrent requests to 5 fixed it 
+
 
 
 ### Tool use
