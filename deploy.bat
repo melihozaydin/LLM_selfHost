@@ -56,7 +56,7 @@ REM Run the Ollama WebUI service --add-host host.docker.internal:host-gateway ^
 REM   -e OLLAMA_BASE_URLS=http://host.docker.internal:7869 ^
 REM PORT FORWARDİNG ISSUE ON LAN : https://github.com/containers/podman/issues/17030
 REM 	https://learn.microsoft.com/en-us/windows/wsl/networking#accessing-a-wsl-2-distribution-from-your-local-area-network-lan
-REM netsh interface portproxy add v4tov4 listenport=4000 listenaddress=0.0.0.0 connectport=4000 connectaddress=192.168.127.2
+REM netsh interface portproxy add v4tov4 listenport=8087 listenaddress=0.0.0.0 connectport=8087 connectaddress=172.22.60.208
 podman run -d ^
   --name ollama-webui ^
   --pull always ^
@@ -79,7 +79,7 @@ podman run -d ^
 
 
 :: DEBUG
-EXIT
+::EXIT
 
 echo ------------
 echo Run the Ollama service

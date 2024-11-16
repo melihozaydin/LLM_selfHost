@@ -127,23 +127,37 @@ So setting up the containers by script is needed if using podman instead of dock
 
 
 ### NOTE: ACCESS from LAN devices
+
 	(https://github.com/containers/podman/issues/17030)
 	WSL traffic is isolated to a separate network interface from Windows applications (this is the vWSL interface).
 	- PORT FORWARDİNG ISSUE ON LAN : https://github.com/containers/podman/issues/17030
 	If you need the port to be remotely accessible to other systems on the lan you need to add an ip forward 
 	- see bottom section of https://learn.microsoft.com/en-us/windows/wsl/networking
-  	"""Bash
+  	-------------
+	* STEP1: Find podman-WSL IP
+	"""Bash(WSL)
 	ip route show | grep -i default | awk '{ print $3}'
 	"""
 	or 
+	""" Powershell(Host)
 	podman machine ssh "ip route show | grep -i default | awk '{ print $3}'"
-
-
-
+	"""
+	* STEP2: PortForward WSL ports to Host
 	""" Powershell (HOST)
 	netsh interface portproxy add v4tov4 listenport=8087 listenaddress=0.0.0.0 connectport=8080 connectaddress=192.168.127.1
 	netsh interface portproxy show all
 	"""
+	* STEP3: Add Firewall inbound exceptions
+	-----------------
+	!!! Warning: WSL IP cahanges on each bootup
+	OR
+
+	-----------------
+	Src: (https://github.com/microsoft/WSL/issues/4150#issuecomment-504209723)
+	run "wslbridge.ps1" on login with admin privilages
+	
+	-----------------
+
 
 ### Websearch
 use internal port for searxng port:
