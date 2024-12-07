@@ -91,7 +91,7 @@ server:
   # If your instance owns a /etc/searxng/settings.yml file, then set the following
   # values there.
 
-  secret_key: "9affa0638ac2eafbbb1d56f87a388122dfdebb3ec3f7795e2d92bdb840795a84"  # Is overwritten by ${SEARXNG_SECRET}
+  secret_key: "7c0601369159200b7d7a52d48a3b0072c462d4a9354b88ca675ed388a3dda466"  # Is overwritten by ${SEARXNG_SECRET}
   # Proxy image results through SearXNG. Is overwritten by ${SEARXNG_IMAGE_PROXY}
   image_proxy: false
   # 1.0 and 1.1 are supported
@@ -226,15 +226,12 @@ outgoing:
 #   - 'Hash plugin'
 #   - 'Self Information'
 #   - 'Tracker URL remover'
+#   - 'Unit converter plugin'
 #   - 'Ahmia blacklist'  # activation depends on outgoing.using_tor_proxy
 #   # these plugins are disabled if nothing is configured ..
 #   - 'Hostnames plugin'  # see 'hostnames' configuration below
 #   - 'Open Access DOI rewrite'
 #   - 'Tor check plugin'
-#   # Read the docs before activate: auto-detection of the language could be
-#   # detrimental to users expectations / users can activate the plugin in the
-#   # preferences if they want.
-#   - 'Autodetect search language'
 
 # Configuration of the "Hostnames plugin":
 #

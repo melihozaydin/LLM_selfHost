@@ -10,33 +10,36 @@ echo --------------
 
 REM Set the path to the volumes
 SET CONF_ROOT=./service-configs
+
+SET SEARXNG_VOLUME=%CONF_ROOT%/searxng
+SET SEARXNG_PORT_HOST=8085
+SET SEARXNG_PORT_INTERNAL=8080
+
+SET OLLAMA_VOLUME=%CONF_ROOT%/ollama
+SET OLLAMA_PORT_INTERNAL=11434
+SET OLLAMA_PORT_HOST=7869
+
+SET OLLAMA_WEBUI_VOLUME=%CONF_ROOT%/ollama-webui
+SET WEBUI_PORT_HOST=8087
+SET WEBUI_PORT_INTERNAL=8080
+
+SET N8N_VOLUME=%CONF_ROOT%/n8n
+
+REM Debug INFO
 echo CONF_ROOT: %CONF_ROOT%
 echo ***
-SET OLLAMA_VOLUME=%CONF_ROOT%/ollama
 echo OLLAMA_VOLUME: %OLLAMA_VOLUME%
-
-SET OLLAMA_PORT_INTERNAL=11434
-echo OLLAMA_PORT_INTERNAL: %OLLAMA_PORT_INTERNAL%
-SET OLLAMA_PORT_HOST=7869
-echo OLLAMA_PORT_HOST: %OLLAMA_PORT_HOST%
 echo ***
-SET OLLAMA_WEBUI_VOLUME=%CONF_ROOT%/ollama-webui
 echo OLLAMA_WEBUI_VOLUME: %OLLAMA_WEBUI_VOLUME%
-
-SET WEBUI_PORT_INTERNAL=8080
 echo WEBUI_PORT_INTERNAL: %WEBUI_PORT_INTERNAL%
-SET WEBUI_PORT_HOST=8087
 echo WEBUI_PORT_HOST: %WEBUI_PORT_HOST%
 echo ***
-SET SEARXNG_VOLUME=%CONF_ROOT%/searxng
 echo SEARXNG_VOLUME: %SEARXNG_VOLUME%
-
-SET SEARXNG_PORT_INTERNAL=8080
 echo SEARXNG_PORT_INTERNAL: %SEARXNG_PORT_INTERNAL%
-SET SEARXNG_PORT_HOST=8085
 echo SEARXNG_PORT_HOST: %SEARXNG_PORT_HOST%
 echo ***
-SET N8N_VOLUME=%CONF_ROOT%/n8n
+echo OLLAMA_PORT_INTERNAL: %OLLAMA_PORT_INTERNAL%
+echo OLLAMA_PORT_HOST: %OLLAMA_PORT_HOST%
 echo N8N_VOLUME: %N8N_VOLUME%
 
 echo ------------
@@ -52,23 +55,19 @@ echo ------------
 echo Run the Ollama WebUI service
 echo ------------
 
-REM Run the Ollama WebUI service --add-host host.docker.internal:host-gateway ^
-REM   -e OLLAMA_BASE_URLS=http://host.docker.internal:7869 ^
-REM PORT FORWARDİNG ISSUE ON LAN : https://github.com/containers/podman/issues/17030
-REM 	https://learn.microsoft.com/en-us/windows/wsl/networking#accessing-a-wsl-2-distribution-from-your-local-area-network-lan
-REM netsh interface portproxy add v4tov4 listenport=8087 listenaddress=0.0.0.0 connectport=8087 connectaddress=172.22.60.208
+REM Run the Ollama WebUI service
 podman run -d ^
   --name ollama-webui ^
   --pull always ^
   --restart unless-stopped ^
   --network %NETWORK_NAME% ^
-  -p 0.0.0.0:%WEBUI_PORT_HOST%:%WEBUI_PORT_INTERNAL% ^
+  -p %WEBUI_PORT_HOST%:%WEBUI_PORT_INTERNAL% ^
   -v %OLLAMA_WEBUI_VOLUME%:/app/backend/data ^
   -e OLLAMA_BASE_URLS=http://ollama:%OLLAMA_PORT_INTERNAL% ^
   -e ENV=dev ^
   -e WEBUI_AUTH=False ^
   -e WEBUI_NAME="Melih Ozaydin AI" ^
-  -e WEBUI_URL=http://0.0.0.0:%WEBUI_PORT_INTERNAL% ^
+  -e WEBUI_URL=http://localhost:%WEBUI_PORT_INTERNAL% ^
   -e WEBUI_SECRET_KEY=t0p-s3cr3t ^
   -e ENABLE_RAG_WEB_SEARCH=True ^
   -e RAG_WEB_SEARCH_ENGINE="searxng" ^
@@ -77,9 +76,8 @@ podman run -d ^
   -e SEARXNG_QUERY_URL="http://searxng:%SEARXNG_PORT_INTERNAL%/search?q=<query>" ^
   ghcr.io/open-webui/open-webui:main
 
-
 :: DEBUG
-::EXIT
+EXIT
 
 echo ------------
 echo Run the Ollama service
